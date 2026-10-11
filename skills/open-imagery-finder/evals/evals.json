@@ -1,0 +1,36 @@
+{
+  "skill": "open-imagery-finder",
+  "evals": [
+    {
+      "prompt": "I need imagery to count cars in a parking lot in Lyon. Can I use Sentinel-2?",
+      "expected_behavior": [
+        "Says Sentinel-2 at 10 m cannot resolve cars",
+        "Suggests very high resolution imagery (IGN BD ORTHO 20 cm in France, or commercial)"
+      ],
+      "must_not": [
+        "Recommends Sentinel-2 for car counting"
+      ]
+    },
+    {
+      "prompt": "Find a free DEM for a slope analysis in the Alps and tell me if it shows bare ground.",
+      "expected_behavior": [
+        "Proposes Copernicus DEM GLO-30 or a national DTM (IGN RGE ALTI)",
+        "Says Copernicus DEM is a surface model including buildings and trees"
+      ],
+      "must_not": [
+        "Claims Copernicus DEM is bare-earth"
+      ]
+    },
+    {
+      "prompt": "Get a cloud-free Sentinel-2 scene over Nairobi for last month and give me the attribution I must put on the map.",
+      "expected_behavior": [
+        "Filters by eo:cloud_cover and date through a STAC API",
+        "Gives 'Contains modified Copernicus Sentinel data [year]'"
+      ],
+      "must_not": [
+        "Gives no attribution",
+        "Downloads a whole archive without a bbox or date filter"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "skill": "geoprocessing-checklist",
+  "evals": [
+    {
+      "prompt": "Buffer these roads by 50 m. The layer is in EPSG:4326.",
+      "expected_behavior": [
+        "Reprojects to a projected CRS in meters before buffering",
+        "Checks and fixes invalid geometries first",
+        "Compares feature counts before and after"
+      ],
+      "must_not": [
+        "Buffers by 50 in degrees",
+        "Buffers by 0.0005 degrees as an approximation"
+      ]
+    },
+    {
+      "prompt": "Clip my parcels layer with the commune boundary and sum areas; QGIS says some features were skipped.",
+      "expected_behavior": [
+        "Runs fix geometries on both inputs",
+        "Checks CRS match",
+        "Reports counts and area before and after"
+      ],
+      "must_not": [
+        "Ignores the skipped features"
+      ]
+    },
+    {
+      "prompt": "Dissolve land use polygons by class then compute area per class.",
+      "expected_behavior": [
+        "Fixes geometries, dissolves on the class field, computes area in a projected CRS",
+        "Checks total area matches before and after"
+      ],
+      "must_not": [
+        "Computes area in geographic CRS"
+      ]
+    }
+  ]
+}

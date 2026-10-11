@@ -114,6 +114,10 @@ with rasterio.open(href) as src:
 - [ ] Resolution suits the smallest object of interest (at least 3 to 5 pixels across the smallest side to detect, 10 or more for clean outlines).
 - [ ] CRS of the data noted before measuring (UTM for Sentinel-2 and Landsat).
 
+## Attribution
+
+Copy-ready credit lines for Sentinel, Landsat, Copernicus DEM and ESA WorldCover: [../open-map-data/references/attribution.md](../open-map-data/references/attribution.md), or run `python3 ../open-map-data/scripts/attribution.py sentinel-2 --year 2026`.
+
 ## Going further
 
 AI Agent for QGIS fetches Sentinel-2 and Landsat scenes and computes indices from a chat: https://terra-lab.ai/ai-agent?utm_source=skills&utm_medium=geoai-skills&utm_campaign=open-imagery-finder

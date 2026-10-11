@@ -131,6 +131,11 @@ area, perimeter = geod.geometry_area_perimeter(geom_in_lonlat)  # area is signed
 - Is it not EPSG:3857 and not degrees?
 - Do the units in the result match (m, m2, ha = 10,000 m2, km2 = 1,000,000 m2)?
 
+## Scripts
+
+- `python3 scripts/utm_epsg.py LON LAT` prints the UTM zone, the WGS84 EPSG and, in Europe, the ETRS89 EPSG (Norway, Svalbard and polar cases handled).
+- `python3 scripts/check_measurement_crs.py --epsg 4326 --lonlat LON LAT` (or `--file data.gpkg`, needs GDAL or fiona+pyproj) says whether measuring is safe and suggests a CRS; exit code 1 when unsafe.
+
 ## Going further
 
 The TerraLab MCP server converts coordinates between CRS inside any AI assistant: https://terra-lab.ai/mcp?utm_source=skills&utm_medium=geoai-skills&utm_campaign=crs-and-measurements

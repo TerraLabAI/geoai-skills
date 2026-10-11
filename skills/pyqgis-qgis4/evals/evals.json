@@ -1,0 +1,41 @@
+{
+  "skill": "pyqgis-qgis4",
+  "evals": [
+    {
+      "prompt": "Write a PyQGIS script that adds a memory layer of points and sets a field type to integer, for QGIS 4.",
+      "expected_behavior": [
+        "Uses QMetaType.Type.Int (or the QVariant-free API) for field types",
+        "Uses fully scoped enums like Qgis.GeometryType / QgsWkbTypes scoped names",
+        "Keeps it compatible with QGIS 3.34+ where possible"
+      ],
+      "must_not": [
+        "Uses QVariant.Int",
+        "Uses unscoped Qt5 enums like Qt.AlignLeft without the enum class where QGIS 4 needs scoped names"
+      ]
+    },
+    {
+      "prompt": "My plugin uses `from PyQt5.QtWidgets import QDialog` and `exec_()`. Make it run on QGIS 4.",
+      "expected_behavior": [
+        "Imports from qgis.PyQt instead of PyQt5",
+        "Replaces exec_() with exec()",
+        "Mentions updating metadata.txt (qgisMaximumVersion / supportsQt6)"
+      ],
+      "must_not": [
+        "Keeps direct PyQt5 imports",
+        "Keeps exec_()"
+      ]
+    },
+    {
+      "prompt": "Run a buffer with processing.run in a standalone PyQGIS script and save to a GeoPackage.",
+      "expected_behavior": [
+        "Initializes QgsApplication and Processing before calling processing.run",
+        "Passes parameters by their exact names (INPUT, DISTANCE, OUTPUT)",
+        "Checks the result dict"
+      ],
+      "must_not": [
+        "Calls processing.run without initializing Processing",
+        "Buffers in degrees without mentioning CRS"
+      ]
+    }
+  ]
+}

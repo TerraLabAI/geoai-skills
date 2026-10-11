@@ -39,6 +39,14 @@ Claude Code plugin:
 | [imagery-for-object-detection](skills/imagery-for-object-detection/SKILL.md) | Preparing imagery for detection or segmentation, and checking the results |
 | [map-export-qa](skills/map-export-qa/SKILL.md) | Checking a map before export, print or publication |
 
+## Scripts
+
+Some skills ship small Python 3.9+ scripts in `skills/<name>/scripts/` for steps that are easy to get wrong: UTM EPSG lookup, measurement CRS check, Sentinel-2 offset check, index formulas, attribution lines and a vector layer report. Each runs with `--help`. They use the standard library; the file readers use GDAL or geopandas when installed.
+
+## Evaluations
+
+Each skill has three test prompts in `skills/<name>/evals/evals.json`. [EVALS.md](EVALS.md) explains how to run them with and without the skill; they are checked before each release.
+
 ## Related
 
 - [TerraLab MCP server](https://terra-lab.ai/mcp?utm_source=github&utm_medium=geoai-skills): open map data, coordinates, elevation and GIS files inside AI assistants.

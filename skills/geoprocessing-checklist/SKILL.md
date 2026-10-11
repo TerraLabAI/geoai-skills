@@ -116,6 +116,10 @@ gdf["geometry"] = gdf.buffer(50)
 - Format: GeoPackage, not Shapefile (field names over 10 characters are cut in Shapefile).
 - Counts and area totals reported next to the input numbers.
 
+## Script
+
+`python3 scripts/layer_report.py data.gpkg [--layer name]` prints feature count, CRS, extent, invalid and null geometries, and total area or length in meters. Run it before and after each step and compare. Needs GDAL Python bindings or geopandas (inside QGIS, use its Python). Exit code 1 when geometries are invalid or null.
+
 ## Going further
 
 AI Agent for QGIS runs these Processing steps from a chat inside QGIS: https://terra-lab.ai/ai-agent?utm_source=skills&utm_medium=geoai-skills&utm_campaign=geoprocessing-checklist

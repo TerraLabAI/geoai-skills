@@ -136,6 +136,11 @@ The /10000 cancels in a normalized index, but the -1000 offset does not. Use thi
 
 Sources: https://sentiwiki.copernicus.eu/web/s2-products and https://docs.sentinel-hub.com/api/latest/data/sentinel-2-l2a/
 
+## Scripts
+
+- `python3 scripts/s2_offset_check.py ITEM_JSON_OR_URL` reads a STAC item and prints the reflectance formula to use and why. Run it before any index.
+- `python3 scripts/indices.py [ndvi]` prints formulas and band numbers; add `--band B04=red.tif --band B08=nir.tif -o ndvi.tif` to compute (needs numpy and rasterio, input in reflectance).
+
 ## Going further
 
 AI Agent for QGIS fetches Sentinel-2 and Landsat scenes and computes indices from a chat: https://terra-lab.ai/ai-agent?utm_source=skills&utm_medium=geoai-skills&utm_campaign=sentinel2-indices

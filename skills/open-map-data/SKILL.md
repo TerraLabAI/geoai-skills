@@ -84,7 +84,7 @@ Always filter on the `bbox` columns: DuckDB then reads only the matching row gro
 
 - France: IGN BD TOPO (buildings, roads, hydrography, land use), on geoservices.ign.fr, Licence Ouverte Etalab 2.0.
 - Great Britain: OS OpenMap Local, Open Government License.
-- Microsoft Global ML Building Footprints (ODbL) and Google Open Buildings (CC BY 4.0 or ODbL 1.0, your choice). Parts are already merged into Overture buildings.
+- Microsoft Global ML Building Footprints (CDLA Permissive 2.0 from Microsoft; ODbL once merged into Overture) and Google Open Buildings (CC BY 4.0 or ODbL 1.0, your choice). Parts are already merged into Overture buildings.
 
 ## Licenses
 
@@ -110,6 +110,11 @@ Prefer GeoPackage (one file, no 10-character field names, UTF-8, no 2 GB limit, 
 - Feature count and extent look right for the area.
 - CRS stated (sources come in EPSG:4326; reproject for measures).
 - Source, release or download date, and license written next to the file.
+
+## Scripts and references
+
+- Attribution text, license and duty per source: [references/attribution.md](references/attribution.md).
+- `python3 scripts/attribution.py osm overture:buildings --year 2026` prints the lines and a combined credit line; `--list` shows the keys.
 
 ## Going further
 

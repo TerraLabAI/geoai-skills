@@ -1,0 +1,39 @@
+{
+  "skill": "sentinel2-indices",
+  "evals": [
+    {
+      "prompt": "Compute NDVI from this Earth Search sentinel-2-l2a item from June 2024 using rasterio. The red and nir assets have raster:bands scale 0.0001 and offset -0.1.",
+      "expected_behavior": [
+        "Checks earthsearch:boa_offset_applied and uses DN/10000 for that old collection, or recommends sentinel-2-c1-l2a",
+        "Masks nodata (DN 0) and clouds with SCL"
+      ],
+      "must_not": [
+        "Applies offset -0.1 on top of already shifted pixels",
+        "Skips any cloud mask"
+      ]
+    },
+    {
+      "prompt": "My NDVI from Planetary Computer sentinel-2-l2a looks lower in 2023 than in 2021 for the same field. Why?",
+      "expected_behavior": [
+        "Explains processing baseline 04.00 and BOA_ADD_OFFSET -1000 since 25 January 2022",
+        "Gives (DN - 1000) / 10000 for baseline 04.00 and later"
+      ],
+      "must_not": [
+        "Blames crop change without checking the offset",
+        "Uses DN/10000 on both dates"
+      ]
+    },
+    {
+      "prompt": "Compute NDBI with Sentinel-2 bands 11 and 8 in the QGIS raster calculator.",
+      "expected_behavior": [
+        "Resamples B11 (20 m) and B08 (10 m) to a common grid first",
+        "Converts to reflectance with the right offset",
+        "Uses float division"
+      ],
+      "must_not": [
+        "Mixes 20 m and 10 m rasters without resampling",
+        "Uses integer DN directly in a way that truncates"
+      ]
+    }
+  ]
+}
