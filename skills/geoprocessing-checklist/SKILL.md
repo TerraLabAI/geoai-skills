@@ -25,7 +25,7 @@ Run the steps in this order. Skip the ones you do not need, never reorder them.
 2. **Reproject** every input to one projected CRS suited to the area: the national grid (for example EPSG:2154 in France, EPSG:27700 in Great Britain) or the local UTM zone. Use an equal-area CRS for area totals over large regions.
 3. **Fix geometries** on every input.
 4. **Clip** or filter to the study area early, to keep later steps small.
-5. **Buffer**, distance in metres (only meaningful in a projected CRS).
+5. **Buffer**, distance in meters (only meaningful in a projected CRS).
 6. **Dissolve** if overlapping buffers or parts must merge.
 7. **Overlay** (intersection, difference, union).
 8. **Spatial join** to carry attributes across.

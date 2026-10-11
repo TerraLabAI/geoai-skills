@@ -13,7 +13,7 @@ metadata:
 
 - Measuring length or area in EPSG:3857 (Web Mercator). Its scale error grows with latitude: about x1.15 in length at 30 degrees, x1.41 at 45, x2 at 60, and the square of that for areas. Never measure in it.
 - Measuring in EPSG:4326 degrees. A degree of longitude is about 111 km at the equator and about 56 km at 60 degrees. A buffer of "0.01" is not a distance.
-- Swapping axis order. GeoJSON (RFC 7946) is always longitude, latitude. EPSG:4326 as defined by the registry is latitude, longitude, and some tools (WMS 1.3.0, WFS 2.0, PROJ strict mode) honour that.
+- Swapping axis order. GeoJSON (RFC 7946) is always longitude, latitude. EPSG:4326 as defined by the registry is latitude, longitude, and some tools (WMS 1.3.0, WFS 2.0, and PROJ, pyproj and GDAL 3+ unless asked for GIS order with `always_xy=True` or `OAMS_TRADITIONAL_GIS_ORDER`) honor that.
 - Assigning a CRS instead of reprojecting. "Set CRS" only relabels coordinates; "Reproject" transforms them.
 - Ignoring the datum. WGS84 vs ED50 or NAD27 differs by tens to hundreds of meters.
 - Mixing ellipsoidal heights (GPS) with orthometric heights (DEM, survey). The gap is the geoid undulation, up to about 100 m.
@@ -31,7 +31,7 @@ metadata:
 ### UTM zone from longitude
 
 ```python
-zone = int((lon + 180) // 6) + 1          # 1..60
+zone = min(int((lon + 180) // 6) + 1, 60)  # 1..60
 epsg = (32600 if lat >= 0 else 32700) + zone   # WGS 84 / UTM
 ```
 
@@ -42,7 +42,7 @@ Exceptions: zone 32V is widened over southwest Norway, and Svalbard uses zones 3
 | Area | CRS | EPSG |
 | --- | --- | --- |
 | France (mainland) | RGF93 v1 / Lambert-93 | 2154 |
-| France, local precision | RGF93 / CC42 to CC50 (9 conic zones, 1 degree of latitude each) | 3942 to 3950 |
+| France, local precision | RGF93 / CC42 to CC50 (9 conic zones centered on 42 to 50 degrees N, each about 2 degrees tall, overlapping) | 3942 to 3950 |
 | Great Britain | OSGB36 / British National Grid | 27700 |
 | Netherlands | Amersfoort / RD New | 28992 |
 | Belgium | ETRS89 / Belgian Lambert 2008 | 3812 |
@@ -53,9 +53,11 @@ Exceptions: zone 32V is widened over southwest Norway, and Svalbard uses zones 3
 | Australia | GDA2020 / MGA zone 46 to 59 | 7846 to 7859 |
 | World, equal area | WGS 84 / NSIDC EASE-Grid 2.0 Global | 6933 |
 
+Verified on 2026-10-11 against the EPSG registry (epsg.org).
+
 More national systems and vertical datums: `references/national-crs.md`. Always confirm a code at https://epsg.io or https://epsg.org before using it.
 
-CC zone choice in France: CC42 covers latitudes 41.5 to 42.5, CC43 covers 42.5 to 43.5, and so on up to CC50. Pick the zone whose number matches the rounded latitude.
+Each CC zone is centered on its number's latitude; pick the zone whose number is nearest the data's latitude.
 
 ## Local grids
 

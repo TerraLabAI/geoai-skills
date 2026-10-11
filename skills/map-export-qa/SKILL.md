@@ -1,6 +1,6 @@
 ---
 name: map-export-qa
-description: Checklist to run before exporting, printing or sharing a map. Covers the map frame CRS for the area, classification methods (natural breaks, quantiles, equal interval) and when each misleads, sequential versus diverging colour ramps, colour-blind safe palettes and ColorBrewer, normalising counts by area or population, scale bar correctness (not in Web Mercator at high latitudes), north arrow, legend, source and licence credits, DPI for print and screen, and QGIS print layout tips. Use when someone asks to export, print, publish or review a map, make a choropleth or thematic map, pick colours or classes, add a legend or scale bar, or set up a QGIS print layout.
+description: Checklist to run before exporting, printing or sharing a map. Covers the map frame CRS for the area, classification methods (natural breaks, quantiles, equal interval) and when each misleads, sequential versus diverging color ramps, color-blind safe palettes and ColorBrewer, normalising counts by area or population, scale bar correctness (not in Web Mercator at high latitudes), north arrow, legend, source and license credits, DPI for print and screen, and QGIS print layout tips. Use when someone asks to export, print, publish or review a map, make a choropleth or thematic map, pick colors or classes, add a legend or scale bar, or set up a QGIS print layout.
 license: MIT
 metadata:
   author: TerraLab
@@ -32,27 +32,27 @@ Map rates, not totals, on a choropleth: per km², per 1,000 people, per househol
 | Method | Good for | Misleads when |
 |---|---|---|
 | Natural breaks (Jenks) | clustered data, one map | comparing maps; breaks change with each dataset |
-| Quantiles | ranking, even colour use | skewed data: very different values share a class, close values split |
+| Quantiles | ranking, even color use | skewed data: very different values share a class, close values split |
 | Equal interval | evenly spread data, comparable maps | skewed data: most features fall in one class |
 | Manual or round breaks | known thresholds, readability | chosen to push a message |
 
 Use 4 to 7 classes. State the method in the legend or note. Check the histogram before choosing.
 
-## 4. Colour
+## 4. Color
 
 - Sequential ramp (light to dark) for low to high values.
 - Diverging ramp only around a meaningful midpoint (0, average, target).
 - Qualitative palette for categories, at most about 8 to 10.
-- Use colour-blind safe palettes: ColorBrewer (colorbrewer2.org) marks them; viridis-type ramps also work. Avoid rainbow and red-versus-green alone.
+- Use color-blind safe palettes: ColorBrewer (colorbrewer2.org) marks them; viridis-type ramps also work. Avoid rainbow and red-versus-green alone.
 - Check in grayscale if the map may be printed in black and white.
 
 ## 5. Map elements
 
 - [ ] Title that says what, where and when.
 - [ ] Legend with units, class method, no layer names like `layer_final_v2`.
-- [ ] Scale bar in metres or kilometres, from a projected frame CRS; for small-scale maps of large areas, drop it or note it is valid only at a given latitude.
+- [ ] Scale bar in meters or kilometers, from a projected frame CRS; for small-scale maps of large areas, drop it or note it is valid only at a given latitude.
 - [ ] North arrow when north is not up or for print maps; skip on small-scale world maps where north varies.
-- [ ] Source and licence credits, for example `© OpenStreetMap contributors`, imagery provider and date.
+- [ ] Source and license credits, for example `© OpenStreetMap contributors`, imagery provider and date.
 - [ ] Author, date, CRS (EPSG code) in small text.
 - [ ] Inset or locator map if the area is not obvious.
 

@@ -52,7 +52,7 @@ Processing.initialize()
 ## Step 2: imports that work on Qt5 and Qt6
 
 ```python
-from qgis.PyQt.QtCore import Qt, QVariant, pyqtSignal
+from qgis.PyQt.QtCore import Qt, QMetaType, pyqtSignal
 from qgis.PyQt.QtWidgets import QAction, QDialog, QMessageBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import Qgis, QgsProject, QgsVectorLayer, QgsFeature, QgsGeometry, QgsField
@@ -122,7 +122,7 @@ result = processing.run("native:buffer", {
     "JOIN_STYLE": 0,
     "MITER_LIMIT": 2,
     "DISSOLVE": False,
-    "OUTPUT": "memory:",
+    "OUTPUT": "TEMPORARY_OUTPUT",
 })
 out = result["OUTPUT"]
 ```

@@ -42,9 +42,10 @@ Decide which case applies:
 2. Check whether the provider already removed it:
    - Earth Engine `COPERNICUS/S2_SR_HARMONIZED` and `COPERNICUS/S2_HARMONIZED`: already shifted. Use `DN / 10000` for every date. The non-harmonized `COPERNICUS/S2_SR` is deprecated.
    - Microsoft Planetary Computer `sentinel-2-l2a`: raw DN, not harmonized. Apply the offset yourself on baseline 04.00+.
-   - STAC assets with `raster:bands` metadata: if `offset` and `scale` are given (for example `scale: 0.0001`, `offset: -0.1`), apply exactly `DN * scale + offset` and nothing else.
+   - STAC `raster:bands` with `scale` and `offset`: apply `DN * scale + offset`, except on Earth Search `sentinel-2-l2a` items where `earthsearch:boa_offset_applied` is true: their DN are already shifted, so use `DN / 10000`. Prefer Earth Search `sentinel-2-c1-l2a`, whose metadata is correct.
    - Sentinel Hub / Copernicus Data Space process API: `harmonizeValues` defaults to true: DN are shifted to match old baselines (DN = 10000 x reflectance) and negatives are clamped to 0.
    - SAFE products from Copernicus Data Space: raw. Read `BOA_ADD_OFFSET` from the metadata.
+   - CDSE now serves only processing baseline 05.xx before December 2023 (reprocessed), so old scenes there carry the offset too.
 3. Sanity check after conversion: clear water in NIR is near 0 to 0.05, dense vegetation NIR about 0.3 to 0.5. A median above 0.1 over water means the offset was missed.
 
 ```python
@@ -76,7 +77,7 @@ Small negative reflectance after the offset is real noise over dark surfaces. Ke
 ```python
 valid = ~np.isin(scl, [0, 1, 3, 8, 9, 10, 11])
 ```
-SCL is 20 m. Resample it to 10 m with nearest neighbour only, never bilinear. SCL misses thin cloud edges: buffer the mask by a pixel or two, or add `MSK_CLDPRB` / s2cloudless probabilities for stricter work.
+SCL is 20 m. Resample it to 10 m with nearest neighbor only, never bilinear. SCL misses thin cloud edges: buffer the mask by a pixel or two, or add `MSK_CLDPRB` / s2cloudless probabilities for stricter work.
 
 ## Step 4: bands and resampling
 
@@ -91,10 +92,12 @@ SCL is 20 m. Resample it to 10 m with nearest neighbour only, never bilinear. SC
 | B7 | Red edge 3 | 783 | 20 m |
 | B8 | NIR | 833 | 10 m |
 | B8A | Narrow NIR | 865 | 20 m |
-| B9 | Water vapour | 945 | 60 m |
+| B9 | Water vapor | 945 | 60 m |
 | B10 | SWIR cirrus (L1C only) | 1374 | 60 m |
 | B11 | SWIR 1 | 1614 | 20 m |
 | B12 | SWIR 2 | 2202 | 20 m |
+
+Verified on 2026-10-11 against https://sentiwiki.copernicus.eu/web/s2-products.
 
 - Mixing 10 m and 20 m bands: resample the 20 m band to 10 m (bilinear for reflectance) on the exact same grid, or aggregate the 10 m band to 20 m (average). Both rasters must share CRS, origin and pixel size.
 - Pair B8A with B11 or B12 when you want matching 20 m footprints; B8 with B4 for 10 m NDVI.

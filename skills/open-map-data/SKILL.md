@@ -1,6 +1,6 @@
 ---
 name: open-map-data
-description: Chooses and downloads open vector map data for anywhere in the world, and states the licence and attribution it needs. Covers OpenStreetMap (Overpass API, Geofabrik extracts), Overture Maps (buildings, places, transportation, divisions, addresses, base) as GeoParquet queried with DuckDB, national sources such as IGN BD TOPO in France and OS OpenMap Local in Great Britain, open building datasets from Microsoft and Google, licences (ODbL, CDLA Permissive 2.0, CC BY 4.0), bbox queries, size limits and output formats. Use when someone needs building footprints, roads, points of interest, addresses, boundaries or land use for an area, asks where to get GIS data, how to download OSM or Overture data, or whether they may use it commercially.
+description: Chooses and downloads open vector map data for anywhere in the world, and states the license and attribution it needs. Covers OpenStreetMap (Overpass API, Geofabrik extracts), Overture Maps (buildings, places, transportation, divisions, addresses, base) as GeoParquet queried with DuckDB, national sources such as IGN BD TOPO in France and OS OpenMap Local in Great Britain, open building datasets from Microsoft and Google, licenses (ODbL, CDLA Permissive 2.0, CC BY 4.0), bbox queries, size limits and output formats. Use when someone needs building footprints, roads, points of interest, addresses, boundaries or land use for an area, asks where to get GIS data, how to download OSM or Overture data, or whether they may use it commercially.
 license: MIT
 metadata:
   author: TerraLab
@@ -8,8 +8,6 @@ metadata:
 ---
 
 # Open map data
-
-For solar installers, real estate, insurers, planners, developers and students. No GIS software is required: DuckDB or a browser download is enough.
 
 ## What goes wrong without this skill
 
@@ -41,7 +39,7 @@ Small area, specific features: Overpass API.
 ```bash
 curl -s https://overpass-api.de/api/interpreter --data-urlencode 'data=
 [out:json][timeout:60];
-(way["building"](48.85,2.33,48.86,2.35););
+(way["building"](48.85,2.33,48.86,2.35);relation["building"](48.85,2.33,48.86,2.35););
 out geom;' > buildings.json
 ```
 
@@ -56,6 +54,14 @@ ogr2ogr -f GPKG buildings.gpkg region-latest.osm.pbf multipolygons -where "build
 ## Overture Maps
 
 Themes: `addresses`, `base`, `buildings`, `divisions`, `places`, `transportation`. Files are GeoParquet on Amazon S3 (`s3://overturemaps-us-west-2/release/<release>/theme=<theme>/type=<type>/*`) and Azure Blob Storage. Releases are dated (for example `2026-09-23.1`) and old ones are removed, so read the latest from the STAC catalog.
+
+First choice, the official CLI (`pip install overturemaps`), which fetches the latest release:
+
+```bash
+overturemaps download --bbox=2.33,48.85,2.35,48.86 -f geoparquet --type=building -o out.parquet
+```
+
+Second choice, DuckDB, when you need SQL filters or columns. DuckDB still reads every file's metadata: expect minutes, even for a small bbox.
 
 ```sql
 INSTALL spatial; LOAD spatial;
@@ -72,24 +78,26 @@ COPY (
 ) TO 'buildings.gpkg' WITH (FORMAT GDAL, DRIVER 'GPKG');
 ```
 
-Always filter on the `bbox` columns: DuckDB then reads only the matching row groups. Without that filter the query scans the whole world. The Python CLI `overturemaps download --bbox=... -f geojson --type=building` is a simpler option. Check theme and type names on docs.overturemaps.org before use.
+Always filter on the `bbox` columns: DuckDB then reads only the matching row groups. Without that filter the query scans the whole world. Check theme and type names on docs.overturemaps.org before use.
 
 ## National and other sources
 
 - France: IGN BD TOPO (buildings, roads, hydrography, land use), on geoservices.ign.fr, Licence Ouverte Etalab 2.0.
-- Great Britain: OS OpenMap Local, Open Government Licence.
-- Microsoft Global ML Building Footprints (ODbL) and Google Open Buildings (CC BY 4.0 or ODbL, check the dataset page). Parts are already merged into Overture buildings.
+- Great Britain: OS OpenMap Local, Open Government License.
+- Microsoft Global ML Building Footprints (ODbL) and Google Open Buildings (CC BY 4.0 or ODbL 1.0, your choice). Parts are already merged into Overture buildings.
 
-## Licences
+## Licenses
 
-| Licence | Used by | You must |
+| License | Used by | You must |
 |---|---|---|
-| ODbL 1.0 | OSM; Overture buildings, transportation, divisions, base | credit the source; share a publicly used derived database under ODbL; a rendered map (produced work) only needs the credit |
-| CDLA Permissive 2.0 | Overture places | keep the licence text with redistributed data; results of analysis carry no duty |
-| CC BY 4.0 | some Overture sources, many national datasets | credit the source, link the licence, say if you changed it |
+| ODbL 1.0 | OSM; Overture buildings, transportation, divisions, base | credit the source; share a publicly used derived database under ODbL; a rendered map (produced work) needs the credit; if it was made from a derived database, you must also offer that database or the method to rebuild it |
+| CDLA Permissive 2.0 | Overture places | keep the license text with redistributed data; results of analysis carry no duty |
+| CC BY 4.0 | some Overture sources, many national datasets | credit the source, link the license, say if you changed it |
 | Etalab 2.0, OGL | France, UK public data | credit the source and date |
 
-Overture addresses mix licences per source country: read the attribution page. Attribution lines: `© OpenStreetMap contributors`, `© OpenStreetMap contributors, Overture Maps Foundation`. Overture lists per-theme credits at docs.overturemaps.org/attribution.
+Verified on 2026-10-11 against opendatacommons.org, cdla.dev, creativecommons.org and docs.overturemaps.org/attribution.
+
+Overture addresses mix licenses per source country: read the attribution page. Attribution lines: `© OpenStreetMap contributors`, `© OpenStreetMap contributors, Overture Maps Foundation`. Overture lists per-theme credits at docs.overturemaps.org/attribution.
 
 Commercial use is allowed under all of these, within their conditions.
 
@@ -101,7 +109,7 @@ Prefer GeoPackage (one file, no 10-character field names, UTF-8, no 2 GB limit, 
 
 - Feature count and extent look right for the area.
 - CRS stated (sources come in EPSG:4326; reproject for measures).
-- Source, release or download date, and licence written next to the file.
+- Source, release or download date, and license written next to the file.
 
 ## Going further
 

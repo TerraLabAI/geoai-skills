@@ -17,11 +17,11 @@ This skill is about the imagery and the results, not the model.
 - Reprojecting or resampling the image before inference and blurring the objects.
 - Tiling without overlap, so objects cut by tile edges are missed or split.
 - Delivering raw output: duplicates on tile edges, slivers, jagged polygons.
-- Reporting "it worked" without counting errors on a labelled sample.
+- Reporting "it worked" without counting errors on a labeled sample.
 
 ## 1. Check the resolution fits the object
 
-Ground sampling distance (GSD) is the ground size of one pixel. An object should cover several pixels across, ideally 10 or more, for reliable outlines.
+Ground sampling distance (GSD) is the ground size of one pixel. An object needs at least 3 to 5 pixels across the smallest side to detect, 10 or more for clean outlines.
 
 | Object | Typical size | GSD needed | Usable sources |
 |---|---|---|---|
@@ -34,7 +34,7 @@ Ground sampling distance (GSD) is the ground size of one pixel. An object should
 
 Sentinel-2 is 10 m at best (bands B2, B3, B4, B8). A car is less than one pixel and a house is one or two pixels: it can map built-up areas and fields, not individual cars, panels or small buildings. Upsampling it does not add detail.
 
-Read the real GSD before anything else: `gdalinfo image.tif` (Pixel Size), in a projected CRS so the unit is metres.
+Read the real GSD before anything else: `gdalinfo image.tif` (Pixel Size), in a projected CRS so the unit is meters.
 
 ## 2. Bands
 
@@ -68,13 +68,13 @@ gdal_retile.py -ps 1024 1024 -overlap 128 -targetDir tiles/ image.tif
 
 Run these in order on the merged output.
 
-1. **Reproject** the polygons to a projected CRS in metres.
+1. **Reproject** the polygons to a projected CRS in meters.
 2. **Fix geometries** (QGIS `native:fixgeometries`, `ST_MakeValid`, shapely `make_valid`).
-3. **Remove tile-edge duplicates**: where two polygons overlap by more than about 50 % (intersection over union), keep the higher score. Then dissolve touching pieces of the same object split by a tile edge.
+3. **Remove tile-edge duplicates**: where two polygons overlap by more than about 50 % (intersection over union), keep the higher score. Then merge only pieces whose shared edge lies on a tile seam.
 4. **Minimum area filter**: drop polygons below a plausible size (for example 10 m² for buildings, 2 m² for panels).
 5. **Simplify** with a tolerance near the GSD (`native:simplifygeometries`, `ST_SimplifyPreserveTopology`), and for buildings optionally orthogonalize (`native:orthogonalize`).
 6. **Spot-check**: open 20 to 50 random locations over the imagery and look.
-7. **Measure** on a small hand-labelled set (for example 100 to 200 objects in a few areas not used for tuning):
+7. **Measure** on a small hand-labeled set (for example 100 to 200 objects in a few areas not used for tuning):
 
 | Metric | Formula | Says |
 |---|---|---|
@@ -82,7 +82,7 @@ Run these in order on the merged output.
 | Recall | TP / (TP + FN) | how many real objects were found |
 | F1 | 2PR / (P + R) | one number for both |
 
-Count a match when a detection overlaps a labelled object with IoU of 0.5 or more. Report the numbers with the area and imagery date.
+Count a match when a detection overlaps a labeled object with IoU of 0.5 or more. Report the numbers with the area and imagery date.
 
 ## Going further
 
