@@ -1,13 +1,28 @@
 {
   "name": "geoai-skills",
   "displayName": "GeoAI Skills by TerraLab",
-  "version": "1.0.0",
-  "description": "Geospatial AI skills for coding agents: the right CRS and measurements, PyQGIS for QGIS 4, Sentinel-2 indices, open imagery and map data, geoprocessing order, imagery for object detection, map export checks.",
-  "author": { "name": "TerraLab", "email": "yvann.barbot@terra-lab.ai", "url": "https://terra-lab.ai" },
+  "version": "1.1.0",
+  "description": "Agent skills for GIS and geospatial work: QGIS and PyQGIS, finding and converting GIS data, spatial analysis, remote sensing, cartography, object detection in imagery, PostGIS and DuckDB.",
+  "author": {
+    "name": "TerraLab",
+    "email": "yvann.barbot@terra-lab.ai",
+    "url": "https://terra-lab.ai"
+  },
   "homepage": "https://github.com/TerraLabAI/geoai-skills",
   "privacyPolicyUrl": "https://terra-lab.ai/privacy-policy",
   "repository": "https://github.com/TerraLabAI/geoai-skills",
   "license": "MIT",
-  "keywords": ["gis", "geospatial", "qgis", "pyqgis", "remote-sensing", "sentinel-2", "crs", "geoai"],
+  "keywords": [
+    "gis",
+    "qgis",
+    "pyqgis",
+    "geospatial",
+    "remote-sensing",
+    "postgis",
+    "cartography",
+    "sentinel-2",
+    "gdal",
+    "object-detection"
+  ],
   "icon": "./.claude-plugin/icon.png"
 }

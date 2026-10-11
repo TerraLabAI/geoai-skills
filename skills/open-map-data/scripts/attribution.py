@@ -27,7 +27,7 @@ SOURCES = {
                    "Credit the source (at least the licensor name) and the date of last update."),
     "os-openmap": ("Contains OS data © Crown copyright and database right [year]",
                    "Open Government Licence v3.0",
-                   "https://www.nationalarchives.gov.uk/doc/open-government-license/version/3/",
+                   "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
                    "Include the provider's attribution statement and, where possible, link the license."),
     "google-open-buildings": ("Google Open Buildings",
                               "CC BY 4.0 or ODbL 1.0 (your choice)",

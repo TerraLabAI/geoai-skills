@@ -1,0 +1,66 @@
+{
+  "skill": "spatial-analysis",
+  "evals": [
+    {
+      "prompt": "Make a flood risk map for the town of Quimperlé.",
+      "expected_behavior": [
+        "Asks or states the flood type and checks for an official flood map (Géorisques, PPRI) first",
+        "Labels a DEM-based result as a screening of low-lying areas, not a return-period extent",
+        "Conditions the DEM before flow accumulation and checks streams against mapped rivers",
+        "Reports area per class and buildings exposed, with the thresholds used"
+      ],
+      "must_not": [
+        "Presents a DEM threshold as an official 100-year flood zone",
+        "Computes hydrology on a DEM in EPSG:4326"
+      ]
+    },
+    {
+      "prompt": "Trouve les meilleurs terrains pour une ferme solaire dans ce département : pente faible, près des routes, hors zones protégées.",
+      "expected_behavior": [
+        "Separates hard constraints (protected areas) from weighted factors (slope, distance to roads)",
+        "Puts every factor raster on one aligned grid and standardizes it to 0 to 1 with the right direction",
+        "States the weights, proposes equal weights if none given, and runs a sensitivity check",
+        "Drops sites smaller than a minimum size and returns the commands run"
+      ],
+      "must_not": [
+        "Adds raw slope degrees and raw meters together",
+        "Leaves candidate sites inside protected areas"
+      ]
+    },
+    {
+      "prompt": "Buffer these schools by 500 m and count how many houses fall inside. The layer is in EPSG:4326.",
+      "expected_behavior": [
+        "Reprojects to a projected CRS in meters before buffering",
+        "Dissolves overlapping buffers or counts per school deliberately, and says which",
+        "Reports input and output counts"
+      ],
+      "must_not": [
+        "Buffers with distance 500 in degrees or 0.005 degrees",
+        "Double counts houses in overlapping buffers without saying so"
+      ]
+    },
+    {
+      "prompt": "Compute the mean NDVI per field with zonal statistics. Fields are small garden plots of about 50 m2 and the NDVI is Sentinel-2 at 10 m.",
+      "expected_behavior": [
+        "Warns that a 50 m2 plot covers less than one 10 m pixel, so per-plot means are not meaningful",
+        "Reprojects polygons to the raster CRS rather than resampling the raster",
+        "Checks count times pixel area against polygon area"
+      ],
+      "must_not": [
+        "Reports per-plot NDVI means without the resolution caveat"
+      ]
+    },
+    {
+      "prompt": "Delineate the watershed upstream of this gauge point from the Copernicus DEM.",
+      "expected_behavior": [
+        "Reprojects and clips the DEM with a margin, breaches or fills depressions first",
+        "Snaps the gauge to the highest flow accumulation cell before delineating",
+        "Notes that GLO-30 is a surface model and compares the area with a published catchment area if available"
+      ],
+      "must_not": [
+        "Runs flow accumulation on the raw unconditioned DEM",
+        "Uses the unsnapped point and reports a tiny watershed as correct"
+      ]
+    }
+  ]
+}

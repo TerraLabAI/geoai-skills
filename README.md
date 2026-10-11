@@ -1,11 +1,13 @@
 # GeoAI Skills
 
-Agent Skills for geospatial work, by [TerraLab](https://terra-lab.ai). They teach coding agents
-(Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot and others) the GIS steps they most often
-get wrong: wrong coordinate systems, measurements in degrees, QGIS 3 code that breaks in QGIS 4,
-Sentinel-2 values off by an offset, processing steps skipped or run in the wrong order.
+Agent Skills for GIS and geospatial work, by [TerraLab](https://terra-lab.ai). They make coding
+agents (Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot and others) work like a careful GIS
+analyst: inspect the data first, run the steps in the right order, check every result, and hand
+back the code that was run.
 
-Each skill works on its own. No account, server or plugin is needed.
+Built from the failure modes measured in GIS agent benchmarks (most failures are a skipped or
+misordered step, not a bad command), from what GIS users ask AI to do, and tested on QGIS 3.44,
+GDAL and DuckDB. Each skill works on its own: no account, server or plugin is needed.
 
 ## Install
 
@@ -16,7 +18,7 @@ npx skills add TerraLabAI/geoai-skills
 One skill only:
 
 ```bash
-npx skills add TerraLabAI/geoai-skills --skill sentinel2-indices
+npx skills add TerraLabAI/geoai-skills --skill qgis
 ```
 
 Claude Code plugin:
@@ -30,29 +32,37 @@ Claude Code plugin:
 
 | Skill | Use it when |
 | --- | --- |
-| [crs-and-measurements](skills/crs-and-measurements/SKILL.md) | Choosing a coordinate system, reprojecting, measuring distances or areas |
-| [pyqgis-qgis4](skills/pyqgis-qgis4/SKILL.md) | Writing PyQGIS scripts or plugins that run on QGIS 4 and QGIS 3 |
-| [sentinel2-indices](skills/sentinel2-indices/SKILL.md) | Computing NDVI, NDWI, NBR and other indices from Sentinel-2 |
-| [open-imagery-finder](skills/open-imagery-finder/SKILL.md) | Finding open satellite imagery or elevation data for an area |
-| [open-map-data](skills/open-map-data/SKILL.md) | Getting buildings, roads, places or boundaries from OpenStreetMap, Overture or national sources |
-| [geoprocessing-checklist](skills/geoprocessing-checklist/SKILL.md) | Running clip, buffer, dissolve, overlay or raster calculations |
-| [imagery-for-object-detection](skills/imagery-for-object-detection/SKILL.md) | Preparing imagery for detection or segmentation, and checking the results |
-| [map-export-qa](skills/map-export-qa/SKILL.md) | Checking a map before export, print or publication |
+| [qgis](skills/qgis/SKILL.md) | Working in QGIS: PyQGIS scripts for QGIS 3 and 4, Processing and `qgis_process`, layers, projects, plugins, errors |
+| [gis-data](skills/gis-data/SKILL.md) | Finding, downloading, converting and citing data: OpenStreetMap, Overture, national sources, formats, CRS and EPSG |
+| [spatial-analysis](skills/spatial-analysis/SKILL.md) | Joins, overlays, buffers, site suitability, terrain and hydrology, zonal statistics, hotspots |
+| [remote-sensing](skills/remote-sensing/SKILL.md) | Sentinel-2, Landsat, Sentinel-1, Earth Engine, indices such as NDVI, cloud masks, change detection, land cover |
+| [cartography](skills/cartography/SKILL.md) | Making a map: symbology, labels, print layouts, export, web maps with MapLibre or Leaflet |
+| [object-detection](skills/object-detection/SKILL.md) | Detecting, segmenting or counting buildings, trees, cars or solar panels in imagery, and checking the results |
+| [spatial-sql](skills/spatial-sql/SKILL.md) | PostGIS and DuckDB spatial queries, GeoParquet, indexes and query checks |
+
+The eight focused skills of version 1.0 (`crs-and-measurements`, `pyqgis-qgis4`, `sentinel2-indices`,
+`open-imagery-finder`, `open-map-data`, `geoprocessing-checklist`, `imagery-for-object-detection`,
+`map-export-qa`) were merged into these. Their folders stay as short pointers so existing links keep
+working. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Scripts
 
-Some skills ship small Python 3.9+ scripts in `skills/<name>/scripts/` for steps that are easy to get wrong: UTM EPSG lookup, measurement CRS check, Sentinel-2 offset check, index formulas, attribution lines and a vector layer report. Each runs with `--help`. They use the standard library; the file readers use GDAL or geopandas when installed.
+Skills ship small Python 3.9+ scripts in `skills/<name>/scripts/` for steps that are easy to get
+wrong: UTM EPSG lookup, measurement CRS check, layer report, Sentinel-2 offset check, index formulas,
+attribution lines, accuracy assessment, choropleth layout, detection cleanup and scoring. Each runs
+with `--help`.
 
 ## Evaluations
 
-Each skill has three test prompts in `skills/<name>/evals/evals.json`. [EVALS.md](EVALS.md) explains how to run them with and without the skill; they are checked before each release.
+Each skill has 5 test prompts in `skills/<name>/evals/evals.json`. [EVALS.md](EVALS.md) explains how
+to run them with and without the skill.
 
 ## Related
 
 - [TerraLab MCP server](https://terra-lab.ai/mcp?utm_source=github&utm_medium=geoai-skills): open map data, coordinates, elevation and GIS files inside AI assistants.
 - [AI Agent for QGIS](https://terra-lab.ai/ai-agent?utm_source=github&utm_medium=geoai-skills), [AI Segmentation](https://terra-lab.ai/ai-segmentation?utm_source=github&utm_medium=geoai-skills) and [AI Edit](https://terra-lab.ai/ai-edit?utm_source=github&utm_medium=geoai-skills): TerraLab's QGIS plugins.
 
-Issues and pull requests are welcome. Contact: yvann.barbot@terra-lab.ai.
+Issues and pull requests are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md). Contact: yvann.barbot@terra-lab.ai.
 
 ## License
 

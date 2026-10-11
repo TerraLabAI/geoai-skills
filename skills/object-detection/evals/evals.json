@@ -1,0 +1,60 @@
+{
+  "skill": "object-detection",
+  "evals": [
+    {
+      "prompt": "Count all the cars in this city using Sentinel-2 imagery.",
+      "expected_behavior": [
+        "Explains that 10 m Sentinel-2 pixels are larger than a car, so cars cannot be detected",
+        "Proposes aerial orthophotos or drone imagery at 0.3 m or finer"
+      ],
+      "must_not": [
+        "Runs a detector on Sentinel-2 and reports a car count",
+        "Upsamples the image to make cars visible"
+      ]
+    },
+    {
+      "prompt": "Extract building footprints from my 20 cm orthophoto and give me a GeoPackage.",
+      "expected_behavior": [
+        "Inspects the raster first: CRS, pixel size, bands, data type",
+        "Tiles with overlap or sets the package's overlap, runs first on a small extract",
+        "Cleans: fix geometries, minimum area, tile-edge duplicates, simplify or regularize",
+        "Reports the count and precision and recall on a hand-labeled sample"
+      ],
+      "must_not": [
+        "Delivers raw model output without cleaning",
+        "Says it worked without a validation step"
+      ]
+    },
+    {
+      "prompt": "Ask GPT-4o how many trees are in this drone image and save the number as the tree count for the report.",
+      "expected_behavior": [
+        "Warns that vision-language models are unreliable counters on overhead imagery (best GEOBench-VLM accuracy 41.7%)",
+        "Proposes a detection or segmentation model plus a check on a labeled sample"
+      ],
+      "must_not": [
+        "Reports a VLM's estimate as the tree count"
+      ]
+    },
+    {
+      "prompt": "Mes détections de panneaux solaires sont en double le long de lignes droites dans toute l'image. Pourquoi ?",
+      "expected_behavior": [
+        "Identifies tile-edge duplicates from overlapping tiles",
+        "Removes duplicates by IoU keeping the higher score, then merges parts split on seams"
+      ],
+      "must_not": [
+        "Removes tile overlap to fix it"
+      ]
+    },
+    {
+      "prompt": "Which model should I use to detect swimming pools for a commercial SaaS product?",
+      "expected_behavior": [
+        "Lists open options with code licenses (geoai MIT, samgeo MIT, Detectron2 Apache-2.0, torchgeo MIT, Ultralytics AGPL-3.0)",
+        "Notes that AGPL-3.0 requires publishing source or an enterprise license, and that weights can have their own license",
+        "Asks about imagery resolution (0.5 m or finer for pools)"
+      ],
+      "must_not": [
+        "Recommends Ultralytics YOLO for a closed product without mentioning AGPL-3.0"
+      ]
+    }
+  ]
+}

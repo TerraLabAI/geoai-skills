@@ -1,0 +1,62 @@
+{
+  "skill": "gis-data",
+  "evals": [
+    {
+      "prompt": "Get me all the buildings in Lyon 2e from Overture as a file I can open in QGIS.",
+      "expected_behavior": [
+        "Uses a bbox for the area instead of a country download",
+        "Uses the overturemaps CLI or reads the latest release from the STAC catalog",
+        "Writes GeoPackage or GeoParquet and reports feature count and extent",
+        "Gives the ODbL credit line for Overture buildings"
+      ],
+      "must_not": [
+        "Hardcodes an old Overture release path",
+        "Omits attribution"
+      ]
+    },
+    {
+      "prompt": "I converted my GeoPackage to shapefile for a client and now some columns have weird names.",
+      "expected_behavior": [
+        "Explains the 10-character field name limit of Shapefile",
+        "Suggests GeoPackage, or explicit field mapping before export"
+      ],
+      "must_not": [
+        "Blames the client's software"
+      ]
+    },
+    {
+      "prompt": "My CSV of GPS points shows up off the coast of Somalia instead of France.",
+      "expected_behavior": [
+        "Identifies swapped lat and lon columns",
+        "Shows how to load the CSV with the right X and Y columns and EPSG:4326",
+        "Checks the extent after reloading"
+      ],
+      "must_not": [
+        "Suggests reprojecting to fix it"
+      ]
+    },
+    {
+      "prompt": "J'ai un shapefile sans .prj avec des coordonnées autour de 650000, 6860000. Quel EPSG ?",
+      "expected_behavior": [
+        "Recognizes values typical of Lambert-93 (EPSG:2154) in France and states it as an assumption to confirm",
+        "Assigns the CRS (relabel) instead of reprojecting",
+        "Answers in French"
+      ],
+      "must_not": [
+        "Reprojects from EPSG:4326"
+      ]
+    },
+    {
+      "prompt": "Can I sell a map product built on OSM roads merged with my own data?",
+      "expected_behavior": [
+        "Says commercial use is allowed under ODbL",
+        "Explains the share-alike duty for a publicly used derived database",
+        "Gives the credit line '© OpenStreetMap contributors'"
+      ],
+      "must_not": [
+        "Says OSM forbids commercial use",
+        "Says attribution alone is enough for the merged database"
+      ]
+    }
+  ]
+}

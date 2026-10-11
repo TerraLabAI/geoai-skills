@@ -1,0 +1,65 @@
+{
+  "skill": "qgis",
+  "evals": [
+    {
+      "prompt": "In QGIS, buffer my wells layer by 500 m and tell me how many parcels touch a buffer. The wells layer is in EPSG:4326.",
+      "expected_behavior": [
+        "Inspects both layers first (CRS, count, geometry type)",
+        "Reprojects to a projected CRS in meters before buffering",
+        "Uses native:buffer then a location-based selection or join and reports the count",
+        "Cross-checks the count or reports input and output numbers"
+      ],
+      "must_not": [
+        "Buffers with DISTANCE=500 in EPSG:4326",
+        "Buffers with 0.005 degrees as an approximation"
+      ]
+    },
+    {
+      "prompt": "Write a qgis_process command to clip roads.gpkg by commune.gpkg, I run it from a terminal with no QGIS open.",
+      "expected_behavior": [
+        "Uses qgis_process run native:clip with parameters after --",
+        "Suggests qgis_process help native:clip to confirm parameter names",
+        "Checks both inputs share a CRS and reports the output feature count"
+      ],
+      "must_not": [
+        "Uses iface",
+        "Invents parameter names without saying how to check them"
+      ]
+    },
+    {
+      "prompt": "My PyQGIS plugin fails on QGIS 4 with \"type object 'Qt' has no attribute 'UserRole'\". Fix it.",
+      "expected_behavior": [
+        "Replaces Qt.UserRole with Qt.ItemDataRole.UserRole",
+        "Imports from qgis.PyQt",
+        "Mentions exec() instead of exec_() and qgisMaximumVersion in metadata.txt"
+      ],
+      "must_not": [
+        "Imports from PyQt6 directly"
+      ]
+    },
+    {
+      "prompt": "Dissolve these parcels by owner and compute the total area per owner, then save the project.",
+      "expected_behavior": [
+        "Checks and fixes invalid geometries before dissolving",
+        "Computes area in a projected CRS and states the unit",
+        "Saves outputs to a file (GeoPackage) rather than leaving memory layers",
+        "Compares area sum before and after dissolve"
+      ],
+      "must_not": [
+        "Leaves the result as a temporary layer only",
+        "Saves to Shapefile without warning about field name truncation"
+      ]
+    },
+    {
+      "prompt": "Quel est le nombre de bâtiments dans la zone ? (project has a buildings layer and two different zone layers)",
+      "expected_behavior": [
+        "Lists the layers and asks which zone layer is meant, or states the assumption",
+        "Counts with a spatial predicate after aligning CRS",
+        "Answers in French"
+      ],
+      "must_not": [
+        "Picks a zone layer silently"
+      ]
+    }
+  ]
+}

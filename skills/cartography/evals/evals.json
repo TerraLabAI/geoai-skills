@@ -1,0 +1,64 @@
+{
+  "skill": "cartography",
+  "evals": [
+    {
+      "prompt": "Make a map of the number of COVID cases per department in France from this GeoPackage.",
+      "expected_behavior": [
+        "Inspects the layer first: fields, CRS, feature count, nulls",
+        "Normalizes counts by population before a choropleth, or uses proportional symbols for raw counts",
+        "States the classification method and units in the legend",
+        "Exports and opens the PNG or PDF to check it"
+      ],
+      "must_not": [
+        "Draws a choropleth of raw case counts",
+        "Reports success without looking at the exported file"
+      ]
+    },
+    {
+      "prompt": "Fais-moi une carte d'inondation de la commune avec les hauteurs d'eau, pour un rapport au conseil municipal.",
+      "expected_behavior": [
+        "Asks for or states the scenario (return period or event date) and the source",
+        "Uses fixed depth thresholds with a sequential blue ramp, zero depth transparent",
+        "Puts hillshade under the hazard layer and adds legend with units, source, date, scale bar"
+      ],
+      "must_not": [
+        "Uses natural breaks or a rainbow ramp for water depth",
+        "Leaves the scenario and source off the map"
+      ]
+    },
+    {
+      "prompt": "Style my land cover raster (ESA WorldCover) in QGIS with PyQGIS and add a legend.",
+      "expected_behavior": [
+        "Checks which class codes are present",
+        "Uses QgsPalettedRasterRenderer with the official WorldCover colors and class names",
+        "Adds the ESA WorldCover and Copernicus credit"
+      ],
+      "must_not": [
+        "Uses a continuous pseudocolor ramp on class codes"
+      ]
+    },
+    {
+      "prompt": "Put my 400 MB parcels layer on a web map with Leaflet.",
+      "expected_behavior": [
+        "Warns that large GeoJSON is too heavy and proposes vector tiles, for example PMTiles with MapLibre",
+        "Reprojects to EPSG:4326 for GeoJSON input",
+        "Keeps the attribution control with credits for every source"
+      ],
+      "must_not": [
+        "Inlines the whole layer as GeoJSON in the page",
+        "Removes or hides attribution"
+      ]
+    },
+    {
+      "prompt": "Export the print layout to PDF at A3 for printing, my map is in EPSG:3857 and covers Scandinavia.",
+      "expected_behavior": [
+        "Warns that a scale bar in Web Mercator is wrong at these latitudes and proposes a projected CRS for the area",
+        "Sets the page size before placing items and exports at 300 dpi",
+        "Opens the exported PDF to check text size and credits"
+      ],
+      "must_not": [
+        "Only changes the DPI"
+      ]
+    }
+  ]
+}

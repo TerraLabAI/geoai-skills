@@ -1,0 +1,61 @@
+{
+  "skill": "spatial-sql",
+  "evals": [
+    {
+      "prompt": "PostGIS: find all schools within 1 km of a hospital. Both tables are SRID 4326.",
+      "expected_behavior": [
+        "Uses ST_DWithin with a geography cast or a projected SRID so 1000 means meters",
+        "Mentions a GiST index and checks counts"
+      ],
+      "must_not": [
+        "Uses ST_DWithin(geom, geom, 1000) on SRID 4326 geometry",
+        "Uses ST_Distance(...) < 1000 in the WHERE clause"
+      ]
+    },
+    {
+      "prompt": "Count the trees in each park in PostGIS. Some parks have no trees and they disappear from my result.",
+      "expected_behavior": [
+        "Uses LEFT JOIN from parks so empty parks show 0",
+        "Uses ST_Intersects or explains boundary behavior of ST_Contains",
+        "Cross-checks the sum against the total tree count"
+      ],
+      "must_not": [
+        "Keeps an inner join"
+      ]
+    },
+    {
+      "prompt": "In DuckDB I compute ST_Distance_Sphere between two lon/lat points in Paris and get 1.5 km, it should be 1.3 km.",
+      "expected_behavior": [
+        "Identifies the axis order default (EPSG:4326 read as lat, lon)",
+        "Sets geometry_always_xy = true",
+        "Cross-checks with a projected distance"
+      ],
+      "must_not": [
+        "Blames the spherical approximation"
+      ]
+    },
+    {
+      "prompt": "My spatial join between 2 million parcels and the country polygons takes forever.",
+      "expected_behavior": [
+        "Checks GiST indexes and runs EXPLAIN ANALYZE",
+        "Suggests ST_Subdivide on the large polygons into an indexed table",
+        "Avoids ST_Transform on the indexed column inside the WHERE"
+      ],
+      "must_not": [
+        "Only suggests more hardware"
+      ]
+    },
+    {
+      "prompt": "Load parcels.gpkg into Supabase PostGIS and compute area in hectares.",
+      "expected_behavior": [
+        "Uses ogr2ogr with PG connection, geometry name and PROMOTE_TO_MULTI",
+        "Checks row count and SRID after loading",
+        "Computes area in a projected SRID or with geography, divided by 10000"
+      ],
+      "must_not": [
+        "Computes ST_Area on SRID 4326 geometry",
+        "Puts the password in a committed file"
+      ]
+    }
+  ]
+}

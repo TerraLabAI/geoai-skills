@@ -1,0 +1,63 @@
+{
+  "skill": "remote-sensing",
+  "evals": [
+    {
+      "prompt": "My NDVI from Planetary Computer sentinel-2-l2a looks lower in 2023 than in 2021 for the same field. Why?",
+      "expected_behavior": [
+        "Explains processing baseline 04.00 and BOA_ADD_OFFSET -1000 since 25 January 2022",
+        "Gives (DN - 1000) / 10000 for baseline 04.00 and later and DN / 10000 before"
+      ],
+      "must_not": [
+        "Blames crop change without checking the offset",
+        "Uses DN/10000 on both dates"
+      ]
+    },
+    {
+      "prompt": "In Earth Engine, compute the mean NDVI of my region for summer 2025 from a Sentinel-2 median composite.",
+      "expected_behavior": [
+        "Uses COPERNICUS/S2_SR_HARMONIZED and masks clouds (Cloud Score+ or SCL) before the median",
+        "Passes scale=10 and maxPixels to reduceRegion",
+        "Reports the number of images and valid observations"
+      ],
+      "must_not": [
+        "Calls reduceRegion on the composite without a scale",
+        "Uses the deprecated COPERNICUS/S2_SR collection"
+      ]
+    },
+    {
+      "prompt": "Carte de sévérité de l'incendie avec Landsat 9 : image avant le feu en avril, après le feu en septembre.",
+      "expected_behavior": [
+        "Flags the April versus September season gap and proposes the closest clear pre and post images",
+        "Applies Collection 2 scale 0.0000275 and offset -0.2 and masks QA_PIXEL clouds and shadows",
+        "Computes NBR with B5 and B7 and dNBR = pre - post, with the USGS classes and their caveat"
+      ],
+      "must_not": [
+        "Uses raw DN in the NBR",
+        "Classifies severity without stating thresholds"
+      ]
+    },
+    {
+      "prompt": "Make a land cover map of this nature reserve with Random Forest and tell me how accurate it is.",
+      "expected_behavior": [
+        "Checks existing maps (ESA WorldCover, Dynamic World, national) first",
+        "Splits training and validation samples by polygon before training",
+        "Reports a confusion matrix with overall, producer's and user's accuracy on held-out samples"
+      ],
+      "must_not": [
+        "Reports accuracy measured on the training samples",
+        "Gives only kappa"
+      ]
+    },
+    {
+      "prompt": "Clip this Sentinel-2 land cover raster to my commune polygon and reproject it to EPSG:2154 at 10 m.",
+      "expected_behavior": [
+        "Uses nearest neighbor resampling for the categorical raster",
+        "Uses gdal:cliprasterbymasklayer or gdalwarp -cutline with an explicit NoData",
+        "Compares input and output value ranges and extent"
+      ],
+      "must_not": [
+        "Resamples class codes with bilinear or cubic"
+      ]
+    }
+  ]
+}

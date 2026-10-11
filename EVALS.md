@@ -1,6 +1,6 @@
 # Evaluations
 
-Each skill has `skills/<name>/evals/evals.json`: three realistic prompts, each aimed at a trap the skill fixes, with the behavior we expect and what must not happen.
+Each skill has `skills/<name>/evals/evals.json`: realistic prompts (5 per skill), each aimed at a trap the skill fixes, with the behavior we expect and what must not happen.
 
 ## Run them by hand
 
