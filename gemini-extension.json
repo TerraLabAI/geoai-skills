@@ -1,0 +1,5 @@
+{
+  "name": "geoai-skills",
+  "version": "1.0.0",
+  "description": "Geospatial AI skills for coding agents: the right CRS and measurements, PyQGIS for QGIS 4, Sentinel-2 indices, open imagery and map data, geoprocessing order, imagery for object detection, map export checks."
+}

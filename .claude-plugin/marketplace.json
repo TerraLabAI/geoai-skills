@@ -1,0 +1,6 @@
+{
+  "name": "terralab-geoai",
+  "owner": { "name": "TerraLab", "email": "yvann.barbot@terra-lab.ai" },
+  "metadata": { "description": "Geospatial AI skills by TerraLab." },
+  "plugins": [ { "name": "geoai-skills", "source": "./", "description": "Geospatial AI skills for coding agents: the right CRS and measurements, PyQGIS for QGIS 4, Sentinel-2 indices, open imagery and map data, geoprocessing order, imagery for object detection, map export checks." } ]
+}
